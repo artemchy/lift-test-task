@@ -1,0 +1,81 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: rem(528);
+    margin: 0 auto;
+}
+
+.dropZone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: em(40, 18);
+    border: em(2, 18) dashed #495f6e;
+    border-radius: em(8, 18);
+    text-align: center;
+    cursor: pointer;
+    font-size: rem(18);
+    font-weight: 500;
+    line-height: rem(24);
+    letter-spacing: 0;
+    transition: border-color 0.3s, background-color 0.3s;
+
+    &.error {
+        border: em(2, 18) dashed #ff0d11;
+    }
+}
+
+.label {
+    margin-top: rem(20);
+}
+
+.dropZone:hover {
+    border-color: #999;
+    background-color: #007bff0c;
+}
+
+.dragOver {
+    border-color: $main-blue;
+    background-color: #f0f8ff;
+}
+
+.errorMessage {
+    color: #ff0d11;
+    margin-top: em(8, 14);
+    font-size: rem(14);
+    line-height: em(14);
+    letter-spacing: 0;
+}
+
+.hint {
+    font-size: rem(14);
+    line-height: rem(16);
+    letter-spacing: 0;
+    color: #4f616f;
+    font-weight: 400;
+    margin-top: em(8, 14);
+}
+
+.spinner {
+    width: rem(20);
+    height: rem(20);
+    border: em(2, 20) solid transparent;
+    border-top-color: $main-blue;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+.uploadIcon {
+    width: rem(16);
+    height: rem(16);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

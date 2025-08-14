@@ -1,0 +1,9 @@
+.main {
+    max-width: rem(528);
+    min-height: 100svh;
+    padding: rem(40);
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+}
