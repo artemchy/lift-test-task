@@ -20,6 +20,8 @@ const UploadImage: FC<ThirdStepProps> = ({ onFileSelect }) => {
     const handleFile = (file: File) => {
         const validTypes = ['image/png', 'image/jpeg'];
         const maxSize = 10 * 1024 * 1024;
+        if (error) setError(false);
+        setLoading(true);
         // Simulated delay to demonstrate the loading indicator, it leads to an extra re-render.
         setTimeout(() => {
             if (!validTypes.includes(file.type)) {
@@ -36,7 +38,6 @@ const UploadImage: FC<ThirdStepProps> = ({ onFileSelect }) => {
     };
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setLoading(true);
         if (e.target.files?.[0]) handleFile(e.target.files[0]);
     };
 
@@ -54,7 +55,7 @@ const UploadImage: FC<ThirdStepProps> = ({ onFileSelect }) => {
     const onDragLeave = () => setDragOver(false);
 
     return (
-        <div className={s.container}>
+        <>
             <div
                 className={clsx(s.dropZone, { [s.dragOver]: dragOver, [s.error]: error, [s.isLoading]: isLoading })}
                 onClick={handleClick}
@@ -73,7 +74,7 @@ const UploadImage: FC<ThirdStepProps> = ({ onFileSelect }) => {
             </div>
 
             <div className={s.hint}>PNG or JPG, 10mb max</div>
-        </div>
+        </>
     );
 };
 

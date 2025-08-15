@@ -1,7 +1,6 @@
 import { useState, useMemo, lazy, Suspense, useEffect } from 'react';
 import { ProgressBar } from './components/ProgressBar/ProgressBar';
 import { quizSteps } from '../model/quizSteps.model';
-import { saveStepToLocalStorage } from '@/shared/lib/saveStepToLocalStorage';
 import { replacePlaceholder } from '@/shared/lib/replacePlaceholder';
 import { useQuery } from '@tanstack/react-query';
 import { getUserCountry } from '../api/getUserCountry';
@@ -9,6 +8,7 @@ import s from './Quiz.module.scss';
 import type { IQuizButton, IQuizState, YesNoAnswerType } from '../model/types';
 import { FirstStep, SecondStep, FourStep, ThirdStep } from '@features/quiz/ui/steps';
 import { Loader } from '@/shared/ui/components/Loader/Loader';
+import { useSaveQuizStep } from '@/shared/lib/hooks/useSaveQuizStep';
 
 const FinalStep = lazy(() => import('@features/quiz/ui/steps').then((mod) => ({ default: mod.FinalStep })));
 
@@ -20,6 +20,8 @@ const Quiz = () => {
         key: null,
         isClicked: false,
     });
+
+    const saveQuizStep = useSaveQuizStep();
 
     const { buttons, title, progress } = quizSteps.find((s) => s.id === quizState.currentStepId)!;
 
@@ -59,7 +61,7 @@ const Quiz = () => {
     const handleClick = (btn: IQuizButton) => {
         if (!btn || quizState.isClicked) return;
         const { value, next } = btn || {};
-        saveStepToLocalStorage(quizState.currentStepId, value, processedTitle);
+        saveQuizStep(quizState.currentStepId, value, processedTitle);
         setQuizState((prev) => ({
             ...prev,
             selected: value as YesNoAnswerType,
@@ -82,7 +84,6 @@ const Quiz = () => {
         setLoading(true);
         const previewUrl = URL.createObjectURL(file);
         setImageUrl(previewUrl);
-        saveStepToLocalStorage('q3', null, 'Upload an Image', previewUrl);
         setQuizState((prev) => ({
             ...prev,
             currentStepId: 'q5',

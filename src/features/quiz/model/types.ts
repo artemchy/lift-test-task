@@ -18,6 +18,13 @@ export interface IQuizStep {
     buttons?: IQuizButton[] | null;
     progress: number;
 }
+export interface IStoredQuizStep {
+    stepId: string;
+    answer: string | null;
+    title: string;
+    timestamp: number;
+    imageSrc?: string;
+}
 
 export interface IQuizState {
     currentStepId: string;

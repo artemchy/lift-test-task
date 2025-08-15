@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import type { FinalStepProps } from '@/features/quiz/model/types';
-import { Preview } from '../../components/UploadedImage/Preview';
+import { Preview } from '../../components/Preview/Preview';
 import { QuizTitle } from '../../components/QuizTitle/QuizTitle';
 
 const FinalStep: FC<FinalStepProps> = ({ imageUrl, title }) => {
