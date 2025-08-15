@@ -70,7 +70,7 @@ const UploadImage: FC<ThirdStepProps> = ({ onFileSelect }) => {
                     <img className={s.uploadIcon} src="/drag.svg" alt="upload icon" />
                 )}
                 <p className={s.label}>Upload an image or drag and drop here</p>
-                {error && <p className={s.errorMessage}>Error, please try again</p>}
+                <p className={clsx(s.errorMessage, {[s.error]: error}) }>Error, please try again</p>
             </div>
 
             <div className={s.hint}>PNG or JPG, 10mb max</div>

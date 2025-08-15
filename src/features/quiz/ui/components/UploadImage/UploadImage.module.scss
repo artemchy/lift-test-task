@@ -47,7 +47,7 @@
 }
 
 .label {
-    margin-top: rem(20);
+    margin: rem(10) 0 rem(8) 0;
 }
 
 .dragOver {
@@ -57,10 +57,15 @@
 
 .errorMessage {
     color: $error;
-    margin-top: em(8, 14);
     font-size: rem(14);
-    line-height: em(14);
+    line-height: rem(16);
     letter-spacing: 0;
+    font-weight: 400;
+    visibility: hidden;
+
+    &.error {
+        visibility: visible;
+    }
 }
 
 .hint {
@@ -73,18 +78,12 @@
 }
 
 .spinner {
-    width: rem(20);
+    width: rem(16);
     aspect-ratio: 1;
     border: rem(2, 20) solid transparent;
     border-top-color: $main-blue;
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin: auto;
-}
-
-.uploadIcon {
-    width: rem(16);
-    aspect-ratio: 1;
 }
 
 @keyframes spin {
