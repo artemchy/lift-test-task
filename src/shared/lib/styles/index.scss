@@ -1,11 +1,9 @@
 @use 'reset';
-
-// fonts
-@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+@use 'fonts';
 
 body {
     font-family: 'Outfit', sans-serif;
-    font-weight: 900;
+    font-weight: 800;
     font-size: rem(24);
     line-height: rem(32);
     color: $primary-black;
