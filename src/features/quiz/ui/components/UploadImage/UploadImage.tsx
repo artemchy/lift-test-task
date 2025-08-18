@@ -2,6 +2,7 @@ import { useRef, useState, type FC } from 'react';
 import s from './UploadImage.module.scss';
 import clsx from 'clsx';
 import type { ThirdStepProps } from '@/features/quiz/model/types';
+import { UploadIcon } from '@/shared/ui/icons/UploadIcon/UploadIcon';
 
 const UploadImage: FC<ThirdStepProps> = ({ onFileSelect }) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -64,13 +65,9 @@ const UploadImage: FC<ThirdStepProps> = ({ onFileSelect }) => {
                 onDragLeave={onDragLeave}
             >
                 <input ref={inputRef} type="file" accept="image/*" onChange={onChange} style={{ display: 'none' }} />
-                {isLoading ? (
-                    <div className={s.spinner}></div>
-                ) : (
-                    <img className={s.uploadIcon} src="/drag.svg" alt="upload icon" />
-                )}
+                {isLoading ? <div className={s.spinner}></div> : <UploadIcon />}
                 <p className={s.label}>Upload an image or drag and drop here</p>
-                <p className={clsx(s.errorMessage, {[s.error]: error}) }>Error, please try again</p>
+                <p className={clsx(s.errorMessage, { [s.error]: error })}>Error, please try again</p>
             </div>
 
             <div className={s.hint}>PNG or JPG, 10mb max</div>

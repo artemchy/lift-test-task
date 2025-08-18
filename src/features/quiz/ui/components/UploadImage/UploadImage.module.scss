@@ -12,8 +12,8 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-height: rem(152);
-    padding: em(44, 18);
+    max-height: rem(176);
+    padding: em(48, 18) em(16, 18);
     border: em(2, 18) dashed #495f6e;
     border-radius: em(8, 18);
     text-align: center;
@@ -47,7 +47,14 @@
 }
 
 .label {
-    margin: rem(10) 0 rem(8) 0;
+    margin: rem(15) 0px;
+    font-size: rem(18);
+    letter-spacing: 0;
+    line-height: rem(18);
+
+    @media (max-width: 430px) {
+        font-size: rem(16);
+    }
 }
 
 .dragOver {

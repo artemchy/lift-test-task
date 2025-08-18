@@ -9,6 +9,7 @@ import type { IQuizButton, IQuizState, YesNoAnswerType } from '../model/types';
 import { FirstStep, SecondStep, FourStep, ThirdStep } from '@features/quiz/ui/steps';
 import { Loader } from '@/shared/ui/components/Loader/Loader';
 import { useSaveQuizStep } from '@/shared/lib/hooks/useSaveQuizStep';
+import { useNavigate } from 'react-router-dom';
 
 const FinalStep = lazy(() => import('@features/quiz/ui/steps').then((mod) => ({ default: mod.FinalStep })));
 
@@ -21,6 +22,7 @@ const Quiz = () => {
         isClicked: false,
     });
 
+    const navigate = useNavigate();
     const saveQuizStep = useSaveQuizStep();
 
     const { buttons, title, progress } = quizSteps.find((s) => s.id === quizState.currentStepId)!;
@@ -29,6 +31,7 @@ const Quiz = () => {
         data: country,
         isLoading,
         error,
+        isError,
     } = useQuery({
         queryKey: ['user-country'],
         queryFn: getUserCountry,
@@ -37,8 +40,15 @@ const Quiz = () => {
     });
 
     useEffect(() => {
-        if (country) localStorage.setItem('userCountry', country);
-    }, [country]);
+        if (!isLoading) {
+            if (country) {
+                localStorage.setItem('userCountry', country);
+                navigate('/');
+            } else if (isError) {
+                navigate('/geographic-restriction');
+            }
+        }
+    }, [country, isError, isLoading, navigate]);
 
     useEffect(() => {
         return () => {
@@ -93,12 +103,14 @@ const Quiz = () => {
     };
 
     if (isLoading) {
-        return <div>Loading initial data...</div>;
+        return <Loader />;
     }
 
     if (error) {
-        return <div>Error occurred: {error.message}</div>;
+        // return <div>Error occurred: {error.message}</div>;
     }
+
+    if (!country) return null;
 
     return (
         <>

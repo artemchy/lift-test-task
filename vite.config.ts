@@ -19,9 +19,9 @@ export default defineConfig({
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
                         if (id.includes('react')) return 'react-vendor';
+                        if (id.includes('react-router-dom')) return 'react-router-dom';
                         if (id.includes('@tanstack/react-query')) return 'react-query';
                         if (id.includes('axios')) return 'axios';
-                        if (id.includes('clsx')) return 'clsx';
                         return 'vendor';
                     }
                 },
