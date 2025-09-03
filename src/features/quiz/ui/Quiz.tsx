@@ -96,7 +96,7 @@ const Quiz = () => {
     }
 
     if (error) {
-        return <div>We couldn’t detect your country. Error occurred: {error?.message} </div>
+        return <div>We couldn’t detect your country. Error occurred: {error?.message} </div>;
     }
 
     if (!country) return null;

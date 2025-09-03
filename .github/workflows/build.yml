@@ -1,0 +1,33 @@
+name: build
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        types: [opened, edited, reopened]
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Cache dependencies
+              uses: actions/cache@v3
+              with:
+                  path: ~/.npm
+                  key: node-modules-${{ hashFile('**/package-lock.json') }}
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run ESLint
+              run: npm run lint
+
+            - name: Run tests
+              run: npm test -- --watchAll=false
+
+            - name: Build project
+              run: npm run build
