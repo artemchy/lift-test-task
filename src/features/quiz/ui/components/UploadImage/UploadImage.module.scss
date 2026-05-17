@@ -18,6 +18,7 @@
     border-radius: em(8, 18);
     text-align: center;
     cursor: pointer;
+    color: inherit;
     font-size: rem(18);
     font-weight: 500;
     line-height: rem(24);
@@ -31,6 +32,11 @@
     &:hover {
         border-color: #999;
         background-color: #007bff0c;
+    }
+
+    &:focus-visible {
+        outline: rem(3) solid rgba($main-blue, 0.35);
+        outline-offset: rem(3);
     }
 
     &.isLoading,
@@ -69,10 +75,21 @@
     letter-spacing: 0;
     font-weight: 400;
     visibility: hidden;
+    min-height: rem(16);
 
     &.error {
         visibility: visible;
     }
+}
+
+.input {
+    position: absolute;
+    width: rem(1);
+    height: rem(1);
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 .hint {

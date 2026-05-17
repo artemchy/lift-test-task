@@ -1,43 +1,45 @@
 import { useState, useMemo, lazy, Suspense, useEffect } from 'react';
 import { ProgressBar } from './components/ProgressBar/ProgressBar';
-import { quizSteps } from '../model/quizSteps.model';
+import { INITIAL_QUIZ_STEP_ID, QUIZ_TRANSITION_DELAY_MS, quizStepsById } from '../model/quizSteps.model';
 import { replacePlaceholder } from '@/shared/lib/replacePlaceholder';
 import { useQuery } from '@tanstack/react-query';
-import { getUserCountry } from '../api/getUserCountry';
+import { COUNTRY_FALLBACK_LABEL, getUserCountry, USER_COUNTRY_STORAGE_KEY } from '../api/getUserCountry';
 import s from './Quiz.module.scss';
-import type { IQuizButton, IQuizState, YesNoAnswerType } from '../model/types';
-import { FirstStep, SecondStep, FourStep, ThirdStep } from '@features/quiz/ui/steps';
+import type { IQuizButton, IQuizState } from '../model/types';
+import { FirstStep, FourthStep, SecondStep, ThirdStep } from '@features/quiz/ui/steps';
 import { Loader } from '@/shared/ui/components/Loader/Loader';
 import { useSaveQuizStep } from '@/shared/lib/hooks/useSaveQuizStep';
+import { readStorageValue, writeStorageValue } from '@/shared/lib/storage';
 
-const FinalStep = lazy(() => import('@features/quiz/ui/steps').then((mod) => ({ default: mod.FinalStep })));
+const FinalStep = lazy(() => import('./steps/FinalStep/FinalStep'));
 
 const Quiz = () => {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [quizState, setQuizState] = useState<IQuizState>({
-        currentStepId: 'q1',
+        currentStepId: INITIAL_QUIZ_STEP_ID,
         selected: null,
         key: null,
         isClicked: false,
     });
 
     const saveQuizStep = useSaveQuizStep();
-    const { buttons, title, progress } = quizSteps.find((s) => s.id === quizState.currentStepId)!;
+    const currentStep = quizStepsById[quizState.currentStepId];
+    const { buttons, title, progress } = currentStep;
 
     const {
-        data: country,
+        data: detectedCountry,
         isLoading,
-        error,
+        isError,
     } = useQuery({
         queryKey: ['user-country'],
         queryFn: getUserCountry,
         staleTime: 1000 * 60 * 60 * 24,
-        initialData: () => localStorage.getItem('userCountry') || undefined,
+        initialData: () => readStorageValue(USER_COUNTRY_STORAGE_KEY) || undefined,
     });
 
     useEffect(() => {
-        if (country) localStorage.setItem('userCountry', country);
-    }, [country]);
+        if (detectedCountry) writeStorageValue(USER_COUNTRY_STORAGE_KEY, detectedCountry);
+    }, [detectedCountry]);
 
     useEffect(() => {
         return () => {
@@ -47,6 +49,7 @@ const Quiz = () => {
         };
     }, [imageUrl]);
 
+    const country = detectedCountry ?? COUNTRY_FALLBACK_LABEL;
     const processedTitle = replacePlaceholder(title, 'country', country);
 
     const processedButtons = useMemo(() => {
@@ -63,7 +66,7 @@ const Quiz = () => {
         saveQuizStep(quizState.currentStepId, value, processedTitle);
         setQuizState((prev) => ({
             ...prev,
-            selected: value as YesNoAnswerType,
+            selected: value,
             key: processedTitle,
             isClicked: true,
         }));
@@ -75,7 +78,7 @@ const Quiz = () => {
                 selected: null,
                 isClicked: false,
             }));
-        }, 750);
+        }, QUIZ_TRANSITION_DELAY_MS);
     };
 
     const handleFileSelect = (file: File | null, setLoading: (value: boolean) => void) => {
@@ -91,15 +94,9 @@ const Quiz = () => {
         setLoading(false);
     };
 
-    if (isLoading) {
+    if (isLoading && !detectedCountry && !isError) {
         return <Loader />;
     }
-
-    if (error) {
-        return <div>We couldn’t detect your country. Error occurred: {error?.message} </div>;
-    }
-
-    if (!country) return null;
 
     return (
         <>
@@ -123,7 +120,7 @@ const Quiz = () => {
                         />
                     )}
                     {quizState.currentStepId === 'q3' && <ThirdStep onFileSelect={handleFileSelect} />}
-                    {quizState.currentStepId === 'q4' && <FourStep title={processedTitle} />}
+                    {quizState.currentStepId === 'q4' && <FourthStep title={processedTitle} />}
                     {quizState.currentStepId === 'q5' && <FinalStep imageUrl={imageUrl} title={processedTitle} />}
                 </Suspense>
             </div>

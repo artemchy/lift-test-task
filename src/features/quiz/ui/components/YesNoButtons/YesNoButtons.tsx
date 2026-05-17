@@ -11,6 +11,7 @@ export const YesNoButtons: FC<Omit<StepWithButtonsProps, 'title'>> = memo(({ but
 
                 return (
                     <button
+                        type="button"
                         key={btn.value}
                         onClick={() => onClick(btn)}
                         className={clsx(s.button, { [s.active]: isPicked })}

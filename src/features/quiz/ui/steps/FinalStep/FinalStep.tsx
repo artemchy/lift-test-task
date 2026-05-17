@@ -6,7 +6,7 @@ import { QuizTitle } from '../../components/QuizTitle/QuizTitle';
 const FinalStep: FC<FinalStepProps> = ({ imageUrl, title }) => {
     return (
         <>
-            <img src="/party.svg" loading="lazy" alt="uploaded succesfully" />
+            <img src="/party.svg" loading="lazy" alt="Uploaded successfully" />
             <QuizTitle title={title} />
             <Preview imageUrl={imageUrl} />
         </>

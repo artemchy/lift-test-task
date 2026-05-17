@@ -1,3 +1,8 @@
+import type { IQuizStep, QuizStepId } from './types';
+
+export const INITIAL_QUIZ_STEP_ID = 'q1' satisfies QuizStepId;
+export const QUIZ_TRANSITION_DELAY_MS = 750;
+
 export const quizSteps = [
     {
         id: 'q1',
@@ -30,7 +35,7 @@ export const quizSteps = [
         id: 'q4',
         title: 'Well then let’s try next time',
         image: {
-            url: '/public/hand.svg',
+            url: '/hand.svg',
             alt: 'shaking hand',
         },
         progress: 100,
@@ -40,10 +45,18 @@ export const quizSteps = [
         id: 'q5',
         progress: 100,
         image: {
-            url: '/public/party.svg',
-            alt: 'selebration',
+            url: '/party.svg',
+            alt: 'celebration',
         },
         title: 'Image uploaded successfully',
         buttons: null,
     },
-];
+] as const satisfies readonly IQuizStep[];
+
+export const quizStepsById = quizSteps.reduce(
+    (acc, step) => {
+        acc[step.id] = step;
+        return acc;
+    },
+    {} as Record<QuizStepId, IQuizStep>,
+);

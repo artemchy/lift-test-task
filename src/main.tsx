@@ -21,7 +21,7 @@ createRoot(document.getElementById('root')!).render(
             <ErrorBoundaryProvider>
                 <App />
             </ErrorBoundaryProvider>
-            <ReactQueryDevtools initialIsOpen={false} />
+            {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
         </QueryClientProvider>
     </StrictMode>
 );

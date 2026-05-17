@@ -6,11 +6,19 @@ interface Props {
 }
 
 export const ProgressBar = memo(({ value }: Props) => {
+    const safeValue = Math.min(100, Math.max(0, value));
+
     return (
-        <div className={s.wrapper}>
-            <div className={s.label}>{value}%</div>
+        <div
+            className={s.wrapper}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={safeValue}
+        >
+            <div className={s.label}>{safeValue}%</div>
             <div className={s.track}>
-                <div className={s.fill} style={{ transform: `scaleX(${value / 100})` }} />
+                <div className={s.fill} style={{ transform: `scaleX(${safeValue / 100})` }} />
             </div>
         </div>
     );

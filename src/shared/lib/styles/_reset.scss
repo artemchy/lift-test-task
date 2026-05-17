@@ -1,4 +1,5 @@
 @use 'vars' as *;
+@use 'functions' as *;
 
 *,
 *::before,
@@ -51,7 +52,6 @@ select {
     color: inherit;
     background: none;
     border: none;
-    outline: none;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -71,6 +71,11 @@ a {
     color: inherit;
     text-decoration: none;
     cursor: pointer;
+}
+
+:focus-visible {
+    outline: rem(3) solid rgba($main-blue, 0.35);
+    outline-offset: rem(3);
 }
 
 fieldset {

@@ -1,9 +1,11 @@
-export type YesNoAnswerType = 'yes' | 'no' | null;
+export type QuizStepId = 'q1' | 'q2' | 'q3' | 'q4' | 'q5';
+export type YesNoAnswer = 'yes' | 'no';
+export type YesNoAnswerType = YesNoAnswer | null;
 
 export interface IQuizButton {
-    value: string;
+    value: YesNoAnswer;
     label: string;
-    next: string;
+    next: QuizStepId;
 }
 
 export interface IQuizImage {
@@ -12,14 +14,14 @@ export interface IQuizImage {
 }
 
 export interface IQuizStep {
-    id: string;
+    id: QuizStepId;
     title: string;
     image?: IQuizImage | null;
-    buttons?: IQuizButton[] | null;
+    buttons?: readonly IQuizButton[] | null;
     progress: number;
 }
 export interface IStoredQuizStep {
-    stepId: string;
+    stepId: QuizStepId;
     answer: string | null;
     title: string;
     timestamp: number;
@@ -27,19 +29,19 @@ export interface IStoredQuizStep {
 }
 
 export interface IQuizState {
-    currentStepId: string;
+    currentStepId: QuizStepId;
     key: string | null;
     selected: YesNoAnswerType;
     isClicked: boolean;
 }
 
 export interface BaseStepProps {
-    title: string | null;
+    title: string;
     image?: IQuizImage | null;
 }
 
 export interface StepWithButtonsProps extends BaseStepProps {
-    buttons: IQuizButton[];
+    buttons: readonly IQuizButton[];
     selected: YesNoAnswerType;
     onClick: (btn: IQuizButton) => void;
 }

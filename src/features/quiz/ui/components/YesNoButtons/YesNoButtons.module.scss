@@ -26,6 +26,11 @@
         background-color: $unloaded-progress;
     }
 
+    &:focus-visible {
+        outline: rem(3) solid rgba($main-blue, 0.35);
+        outline-offset: rem(3);
+    }
+
     @media (max-width: 430px) {
         font-size: rem(16);
     }
