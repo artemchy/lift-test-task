@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { USER_COUNTRY_STORAGE_KEY } from '../src/features/quiz/api/getUserCountry';
 import { QUIZ_TRANSITION_DELAY_MS } from '../src/features/quiz/model/quizSteps.model';
 import Quiz from '../src/features/quiz/ui/Quiz';
+import { QUIZ_HISTORY_STORAGE_KEY } from '../src/shared/lib/saveStepToLocalStorage';
 
 vi.mock('../src/features/quiz/api/getUserCountry', async () => {
     const actual = await vi.importActual<typeof import('../src/features/quiz/api/getUserCountry')>(
@@ -50,6 +51,24 @@ describe('Quiz flow', () => {
         act(() => {
             vi.advanceTimersByTime(QUIZ_TRANSITION_DELAY_MS);
         });
+
+        expect(screen.getByRole('heading', { name: 'Ready to create your first photo album?' })).toBeInTheDocument();
+    });
+
+    it('restores the next step from saved yes/no answers after refresh', () => {
+        localStorage.setItem(
+            QUIZ_HISTORY_STORAGE_KEY,
+            JSON.stringify([
+                {
+                    stepId: 'q1',
+                    answer: 'yes',
+                    title: 'Are you from Poland?',
+                    timestamp: Date.now(),
+                },
+            ]),
+        );
+
+        renderWithClient(<Quiz />);
 
         expect(screen.getByRole('heading', { name: 'Ready to create your first photo album?' })).toBeInTheDocument();
     });

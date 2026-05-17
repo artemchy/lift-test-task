@@ -22,7 +22,7 @@ export interface IQuizStep {
 }
 export interface IStoredQuizStep {
     stepId: QuizStepId;
-    answer: string | null;
+    answer: YesNoAnswerType;
     title: string;
     timestamp: number;
     imageSrc?: string;

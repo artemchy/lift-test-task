@@ -1,4 +1,5 @@
 import type { IStoredQuizStep, QuizStepId, YesNoAnswerType } from '@/features/quiz/model/types';
+import { isStoredQuizStep } from '@/features/quiz/lib/restoreQuizProgress';
 import { readJsonStorage, writeJsonStorage } from './storage';
 
 export const QUIZ_HISTORY_STORAGE_KEY = 'quizHistory';
@@ -10,7 +11,7 @@ export const saveStepToLocalStorage = (
     imageSrc?: string,
 ) => {
     const storedHistory = readJsonStorage<unknown>(QUIZ_HISTORY_STORAGE_KEY, []);
-    const history: IStoredQuizStep[] = Array.isArray(storedHistory) ? (storedHistory as IStoredQuizStep[]) : [];
+    const history: IStoredQuizStep[] = Array.isArray(storedHistory) ? storedHistory.filter(isStoredQuizStep) : [];
     const alreadyExists = history.some((step) => step.stepId === stepId);
 
     if (alreadyExists) return false;

@@ -1,6 +1,6 @@
 import { useState, useMemo, lazy, Suspense, useEffect } from 'react';
 import { ProgressBar } from './components/ProgressBar/ProgressBar';
-import { INITIAL_QUIZ_STEP_ID, QUIZ_TRANSITION_DELAY_MS, quizStepsById } from '../model/quizSteps.model';
+import { QUIZ_TRANSITION_DELAY_MS, quizStepsById } from '../model/quizSteps.model';
 import { replacePlaceholder } from '@/shared/lib/replacePlaceholder';
 import { useQuery } from '@tanstack/react-query';
 import { COUNTRY_FALLBACK_LABEL, getUserCountry, USER_COUNTRY_STORAGE_KEY } from '../api/getUserCountry';
@@ -9,18 +9,20 @@ import type { IQuizButton, IQuizState } from '../model/types';
 import { FirstStep, FourthStep, SecondStep, ThirdStep } from '@features/quiz/ui/steps';
 import { Loader } from '@/shared/ui/components/Loader/Loader';
 import { useSaveQuizStep } from '@/shared/lib/hooks/useSaveQuizStep';
-import { readStorageValue, writeStorageValue } from '@/shared/lib/storage';
+import { readJsonStorage, readStorageValue, writeStorageValue } from '@/shared/lib/storage';
+import { QUIZ_HISTORY_STORAGE_KEY } from '@/shared/lib/saveStepToLocalStorage';
+import { resolveInitialQuizStepId } from '../lib/restoreQuizProgress';
 
 const FinalStep = lazy(() => import('./steps/FinalStep/FinalStep'));
 
 const Quiz = () => {
     const [imageUrl, setImageUrl] = useState<string | null>(null);
-    const [quizState, setQuizState] = useState<IQuizState>({
-        currentStepId: INITIAL_QUIZ_STEP_ID,
+    const [quizState, setQuizState] = useState<IQuizState>(() => ({
+        currentStepId: resolveInitialQuizStepId(readJsonStorage<unknown[]>(QUIZ_HISTORY_STORAGE_KEY, [])),
         selected: null,
         key: null,
         isClicked: false,
-    });
+    }));
 
     const saveQuizStep = useSaveQuizStep();
     const currentStep = quizStepsById[quizState.currentStepId];
